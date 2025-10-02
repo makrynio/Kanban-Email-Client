@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for drag and drop */
+.email-card {
+  user-select: none;
+  touch-action: none;
+}
+
+.email-card:hover {
+  transform: translateY(-1px);
+}
+
+/* Ensure draggable elements are properly positioned */
+[data-rbd-draggable-context-id] {
+  position: relative;
+}
+
+/* Style for dragging state */
+.email-card.dragging {
+  opacity: 0.8;
+  transform: rotate(5deg);
+}
+
+/* Ensure droppable areas are properly styled */
+[data-rbd-droppable-id] {
+  min-height: 100px;
+}
+
+/* Visual feedback for drag over */
+.drag-over {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 2px dashed #3b82f6;
+}
+
+/* Tooltip animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tooltip-enter {
+  animation: fadeIn 0.2s ease-in-out;
+}
