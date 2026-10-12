@@ -65,7 +65,7 @@ export const GmailAuthProvider: React.FC<GmailAuthProviderProps> = ({ children }
       setIsLoading(true);
       
       if (OAUTH_CONFIG.USE_DEMO_MODE) {
-        throw new Error('Demo mode is enabled. To use real Gmail, set USE_DEMO_MODE to false in oauth.ts');
+        throw new Error('Demo mode is enabled because no Google credentials are configured. Copy .env.example to .env and set VITE_GOOGLE_CLIENT_ID and VITE_GOOGLE_CLIENT_SECRET.');
       }
 
       // Get auth URL and open it

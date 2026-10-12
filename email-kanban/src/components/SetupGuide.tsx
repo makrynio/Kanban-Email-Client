@@ -39,18 +39,10 @@ export function SetupGuide() {
     },
     {
       title: "Update Configuration",
-      content: "Update the oauth.ts file with your credentials",
-      code: `// src/config/oauth.ts
-export const OAUTH_CONFIG = {
-  GOOGLE_CLIENT_ID: 'your-client-id.googleusercontent.com',
-  GOOGLE_CLIENT_SECRET: 'your-client-secret',
-  REDIRECT_URI: 'urn:ietf:wg:oauth:2.0:oob',
-  SCOPES: [
-    'https://www.googleapis.com/auth/gmail.readonly',
-    'https://www.googleapis.com/auth/gmail.modify'
-  ],
-  USE_DEMO_MODE: false  // Set this to false
-};`
+      content: "Copy .env.example to .env and add your credentials",
+      code: `# email-kanban/.env (git-ignored)
+VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+VITE_GOOGLE_CLIENT_SECRET=your-client-secret`
     }
   ];
 

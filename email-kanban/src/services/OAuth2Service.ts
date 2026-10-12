@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 import Store from 'electron-store';
 import { OAUTH_CONFIG } from '../config/oauth';
+import { getStoreEncryptionKey } from '../config/storeKey';
 
 export interface OAuthTokens {
   access_token: string;
@@ -24,7 +25,7 @@ class OAuth2Service {
     
     this.store = new Store({
       name: 'oauth-tokens',
-      encryptionKey: 'oauth-encryption-key'
+      encryptionKey: getStoreEncryptionKey()
     });
   }
 

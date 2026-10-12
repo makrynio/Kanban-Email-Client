@@ -1,4 +1,17 @@
 
-<img width="1187" height="799" alt="Screenshot 2025-10-02 134816" src="https://github.com/user-attachments/assets/50c6699e-1e21-42ad-87b5-7e810faa5359" />
-<img width="1190" height="797" alt="image" src="https://github.com/user-attachments/assets/092fbb0b-3c41-4f8b-894e-0ceb95bca031" />
 
+# Kanban Email Client
+
+A desktop email client (Electron, React, TypeScript) that shows your inbox as draggable post-it notes on a kanban board. Connects to Gmail through OAuth2, or to any IMAP server. A demo mode with sample emails runs without any credentials.
+
+The app lives in [`email-kanban/`](email-kanban/).
+
+## Quick start
+
+```bash
+cd email-kanban
+npm install
+npm run electron:dev
+```
+
+See [`email-kanban/README.md`](email-kanban/README.md) for setup of Gmail credentials.

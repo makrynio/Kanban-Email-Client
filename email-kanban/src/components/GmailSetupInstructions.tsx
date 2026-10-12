@@ -1,5 +1,6 @@
 import React from 'react';
 import { ExternalLink, Key, Settings } from 'lucide-react';
+import { OAUTH_CONFIG } from '../config/oauth';
 
 const GmailSetupInstructions: React.FC = () => {
   return (
@@ -63,11 +64,10 @@ const GmailSetupInstructions: React.FC = () => {
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-amber-900 mb-4">Step 3: Update Configuration</h2>
           <div className="text-amber-800 space-y-3">
-            <p>Replace the placeholder credentials in <code className="bg-amber-100 px-2 py-1 rounded">src/config/oauth.ts</code> with your actual values:</p>
+            <p>Copy <code className="bg-amber-100 px-2 py-1 rounded">.env.example</code> to <code className="bg-amber-100 px-2 py-1 rounded">.env</code> in the <code className="bg-amber-100 px-2 py-1 rounded">email-kanban</code> folder and add your values, then restart the app:</p>
             <div className="bg-white border border-amber-300 rounded p-4 font-mono text-sm">
-              <div className="text-gray-600">// Replace these with your actual credentials:</div>
-              <div>GOOGLE_CLIENT_ID: 'your-client-id.apps.googleusercontent.com'</div>
-              <div>GOOGLE_CLIENT_SECRET: 'your-client-secret'</div>
+              <div>VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com</div>
+              <div>VITE_GOOGLE_CLIENT_SECRET=your-client-secret</div>
             </div>
           </div>
         </div>
@@ -77,15 +77,15 @@ const GmailSetupInstructions: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
               <span className="font-medium">Client ID:</span>
-              <div className="text-gray-600 font-mono break-all">153870710574-il4msv7nurdo0rkqhft1tnqcep3lsi3n.apps.googleusercontent.com</div>
+              <div className="text-gray-600 font-mono break-all">{OAUTH_CONFIG.GOOGLE_CLIENT_ID || 'Not configured'}</div>
             </div>
             <div>
               <span className="font-medium">Status:</span>
-              <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs">Demo Credentials</span>
+              <span className="ml-2 px-2 py-1 bg-yellow-100 text-yellow-800 rounded text-xs">{OAUTH_CONFIG.GOOGLE_CLIENT_ID ? 'Configured' : 'Demo mode'}</span>
             </div>
           </div>
           <div className="mt-3 text-sm text-gray-600">
-            ⚠️ The current credentials are for demo purposes only. Replace them with your own to connect to your Gmail account.
+            Without your own credentials the app runs in demo mode with sample emails.
           </div>
         </div>
 

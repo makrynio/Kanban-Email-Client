@@ -109,6 +109,17 @@ export function EmailSetup({ onConnect }: EmailSetupProps) {
         </div>
 
         {provider === 'custom' && (
+          <label className="flex items-center gap-2 text-sm text-gray-700">
+            <input
+              type="checkbox"
+              checked={!!config.allowSelfSignedCerts}
+              onChange={e => setConfig(prev => ({ ...prev, allowSelfSignedCerts: e.target.checked }))}
+            />
+            Accept self-signed certificate (insecure, only for servers you trust)
+          </label>
+        )}
+
+        {provider === 'custom' && (
           <>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

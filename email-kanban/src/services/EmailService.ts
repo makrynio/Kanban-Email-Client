@@ -1,6 +1,7 @@
 import Imap from 'node-imap';
 import Store from 'electron-store';
 import { simpleParser } from 'mailparser';
+import { getStoreEncryptionKey } from '../config/storeKey';
 
 interface EmailConfig {
   user: string;
@@ -8,6 +9,8 @@ interface EmailConfig {
   host: string;
   port: number;
   tls: boolean;
+  /** Accept self-signed or otherwise invalid TLS certificates. Off by default; only enable for servers you trust. */
+  allowSelfSignedCerts?: boolean;
 }
 
 interface EmailFolder {
@@ -32,7 +35,7 @@ class EmailService {
   constructor() {
     this.store = new Store({
       name: 'email-config',
-      encryptionKey: 'your-encryption-key' // TODO: Generate this securely
+      encryptionKey: getStoreEncryptionKey()
     });
   }
 
@@ -44,7 +47,7 @@ class EmailService {
         host: config.host,
         port: config.port,
         tls: config.tls,
-        tlsOptions: { rejectUnauthorized: false } // TODO: Make this configurable
+        tlsOptions: { rejectUnauthorized: !config.allowSelfSignedCerts }
       });
 
       this.imap.once('ready', () => {

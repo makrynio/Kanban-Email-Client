@@ -1,204 +1,67 @@
 # Email Kanban
 
-A modern, visual email client built with Tauri and React that organizes emails as post-it notes in a kanban board interface.
+A desktop email client that organises emails as draggable post-it notes on a kanban board. Built with Electron, React and TypeScript.
 
 ## Features
 
-- 🎯 **Visual Email Organization**: View emails as draggable post-it notes
-- 📋 **Kanban Board**: Drag & drop emails between columns (Unread, Read, Flagged)
-- 📁 **Folder Navigation**: Easy navigation between different email folders
-- 📱 **Modern UI**: Beautiful, responsive interface built with Tailwind CSS
-- 🔄 **Drag & Drop**: Intuitive email organization with smooth animations
-- 📎 **Attachment Support**: View and manage email attachments
-- 🚀 **Cross-Platform**: Runs on Windows, macOS, and Linux
+- Kanban board of emails with drag and drop between columns, powered by dnd-kit
+- Gmail integration through OAuth2 (read, modify, send, compose scopes)
+- Generic IMAP support for other providers
+- Folder navigation, email viewer and action modals
+- Demo mode with sample emails, used automatically when no credentials are configured
 
-## Tech Stack
+## Tech stack
 
-- **Frontend**: React 18 + TypeScript + Tailwind CSS
-- **Backend**: Rust (Tauri)
-- **Build Tool**: Vite
-- **Drag & Drop**: react-beautiful-dnd
-- **Icons**: Lucide React
+- Electron 25, Vite, React 18, TypeScript, Tailwind CSS
+- dnd-kit for drag and drop, lucide-react for icons
+- googleapis and google-auth-library for Gmail, node-imap and mailparser for IMAP
+- electron-store for local, encrypted settings and tokens
 
-## Prerequisites
+## Getting started
 
-Before you begin, ensure you have the following installed:
+Requires Node.js 18 or higher.
 
-- **Node.js** (v18 or higher)
-- **Rust** (latest stable version)
-- **Git**
-
-### Installing Prerequisites
-
-#### Windows
 ```bash
-# Install Node.js
-winget install OpenJS.NodeJS
-
-# Install Rust
-winget install Rustlang.Rust.MSVC
+npm install
+npm run electron:dev      # development with hot reload
+npm run electron:build    # package the desktop app
 ```
 
-#### macOS
-```bash
-# Install Node.js
-brew install node
+Without credentials the app starts in demo mode.
 
-# Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
+### Connecting Gmail
 
-#### Linux
-```bash
-# Install Node.js
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
+1. In [Google Cloud Console](https://console.cloud.google.com/) create a project and enable the Gmail API.
+2. Create an OAuth client ID of type **Desktop application**.
+3. Copy `.env.example` to `.env` and fill in the values:
 
-# Install Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-## Getting Started
-
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd email-kanban
+   ```
+   VITE_GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+   VITE_GOOGLE_CLIENT_SECRET=your-client-secret
    ```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+4. Restart the app. `.env` is git-ignored, so credentials are never committed.
 
-3. **Start development server**
-   ```bash
-   npm run tauri dev
-   ```
+### Connecting over IMAP
 
-4. **Build for production**
-   ```bash
-   npm run tauri build
-   ```
+Enter your server details in the IMAP setup form. TLS certificates are verified by default. The "accept self-signed certificate" option is off by default and should only be used with servers you trust.
 
-## Development
+## Security notes
 
-### Available Scripts
+- No credentials or keys are stored in the source. Google credentials come from `.env`.
+- Local settings and OAuth tokens are encrypted with `VITE_STORE_ENCRYPTION_KEY` if set, otherwise a random per-install key generated on first run. A key stored beside the data only obfuscates it at rest; moving it to the OS keychain (Electron `safeStorage`) is a planned improvement.
+- IMAP passwords are saved in the local settings file for reconnection.
 
-- `npm run dev` - Start Vite dev server
-- `npm run build` - Build the React app
-- `npm run preview` - Preview the built app
-- `npm run tauri dev` - Start Tauri development mode
-- `npm run tauri build` - Build the desktop app
-
-### Project Structure
+## Project structure
 
 ```
 email-kanban/
-├── src/                    # React frontend source
-│   ├── components/        # React components
-│   ├── types.ts          # TypeScript type definitions
-│   ├── App.tsx           # Main app component
-│   ├── main.tsx          # React entry point
-│   └── index.css         # Global styles
-├── src-tauri/            # Rust backend source
-│   ├── src/              # Rust source code
-│   ├── Cargo.toml        # Rust dependencies
-│   ├── build.rs          # Build script
-│   └── tauri.conf.json   # Tauri configuration
-├── package.json          # Node.js dependencies
-├── vite.config.ts        # Vite configuration
-├── tailwind.config.js    # Tailwind CSS configuration
-└── README.md             # This file
+├── electron/        # Electron main process
+├── src/
+│   ├── components/  # Kanban board, email viewer, setup screens
+│   ├── config/      # OAuth config and store key helper
+│   ├── hooks/       # Tooltip and drag-hold hooks
+│   └── services/    # Gmail, IMAP, OAuth2 and demo services
+├── .env.example
+└── vite.config.ts
 ```
-
-## Features in Detail
-
-### Kanban Board
-- **Unread Column**: New emails that haven't been opened
-- **Read Column**: Emails that have been viewed
-- **Flagged Column**: Important emails marked for follow-up
-
-### Email Cards
-Each email is displayed as a card showing:
-- Sender information
-- Subject line
-- Preview of email content
-- Timestamp
-- Attachment indicators
-- Status (unread, read, flagged)
-
-### Drag & Drop
-- Move emails between columns to change their status
-- Reorder emails within columns
-- Visual feedback during drag operations
-
-### Folder Navigation
-- Inbox, Sent, Drafts, Archive, Trash, Flagged
-- Email counts for each folder
-- Easy switching between different views
-
-## Customization
-
-### Styling
-The app uses Tailwind CSS for styling. You can customize:
-- Colors in `tailwind.config.js`
-- Component styles in `src/index.css`
-- Individual component styles
-
-### Adding New Features
-- **New Email Actions**: Add buttons in `EmailViewer.tsx`
-- **New Columns**: Modify the `columns` state in `KanbanBoard.tsx`
-- **New Folders**: Update the `folders` array in `Sidebar.tsx`
-
-## Building for Distribution
-
-### Windows
-```bash
-npm run tauri build
-# Output: src-tauri/target/release/bundle/msi/
-```
-
-### macOS
-```bash
-npm run tauri build
-# Output: src-tauri/target/release/bundle/dmg/
-```
-
-### Linux
-```bash
-npm run tauri build
-# Output: src-tauri/target/release/bundle/appimage/
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Support
-
-If you encounter any issues or have questions:
-1. Check the [Tauri documentation](https://tauri.app/)
-2. Review the [React documentation](https://react.dev/)
-3. Open an issue in this repository
-
-## Roadmap
-
-- [ ] Email composition and sending
-- [ ] IMAP/SMTP integration
-- [ ] Search and filtering
-- [ ] Custom folder creation
-- [ ] Email templates
-- [ ] Dark mode support
-- [ ] Keyboard shortcuts
-- [ ] Email threading
-- [ ] Calendar integration
-- [ ] Mobile responsive design
